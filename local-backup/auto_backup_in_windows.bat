@@ -2,31 +2,32 @@
 setlocal enabledelayedexpansion
 
 :: ===========================
-:: 通用配置（可按需修改）
+:: Global configuration (can be customized)
 :: ===========================
 
-:: 提交信息前缀（所有仓库共用）
+:: Commit message prefix (shared by all repositories)
 set "COMMIT_PREFIX=Daily auto-commit"
 
-:: 是否自动启用代理：1=启用，0=禁用（所有仓库共用）
+:: Whether to automatically enable proxy: 1 = enable, 0 = disable (shared by all repositories)
 set "USE_PROXY=0"
 
-:: 代理控制脚本路径[默认使用当前目录下的 PowerShell 脚本，通过 Clash API 开启代理模式]
+:: Proxy controller script path
+:: By default, use the PowerShell script in the current directory to enable proxy mode via Clash API
 set "PROXY_SCRIPT=%~dp0start_clash_proxy.ps1"
 
 :: ================================
-:: 需要备份的仓库索引列表（按需增减，比如：1 2 3）
+:: Repository index list to back up (extend as needed, e.g.: 1 2 3)
 set "REPO_INDEXES=1"
-:: ---------- 仓库 1 配置 ----------
-:: 仓库本地路径
+:: ---------- Repository 1 configuration ----------
+:: Local repository path
 set "REPO_DIR_1=D:\ProjectOfBZH\demo-uniapp"
-:: 目标分支
+:: Target branch
 set "GIT_BRANCH_1=main"
-:: GitHub 仓库信息（owner 和 repo）
+:: GitHub repository info (owner and repo)
 set "GITHUB_OWNER_1=Hazehacker"
 set "GITHUB_REPO_1=demo-uniapp"
 
-:: ---------- 仓库 2 示例（需要时取消注释并修改） ----------
+:: ---------- Repository 2 example (uncomment and modify when needed) ----------
 :: set "REPO_DIR_2=D:\path\to\another-repo"
 :: set "GIT_BRANCH_2=main"
 :: set "GITHUB_OWNER_2=YourGitHubName"
@@ -35,34 +36,34 @@ set "GITHUB_REPO_1=demo-uniapp"
 :: ================================
 
 
-:: 通用初始化
+:: Common initialization
 
-:: 设置控制台编码为UTF-8，避免中文乱码
+:: Set console code page to UTF-8 to avoid garbled output
 chcp 65001 > nul
 
-:: 加载 Git 账号和密码（保存在同目录下的 git_env.bat 中）
-:: %~dp0 代表当前脚本所在目录
+:: Load Git username and password (stored in git_env.bat in the same directory)
+:: %~dp0 represents the directory path of this script
 if exist "%~dp0git_env.bat" (
     call "%~dp0git_env.bat"
 ) else (
-    echo 未找到 git_env.bat，无法加载 Git 账号和密码。
+    echo [ERR] git_env.bat not found. Cannot load Git credentials.
     goto :EOF
 )
 
 
-:: 启动/控制代理（可选，通过外部脚本解耦）
+:: Start/control proxy (optional, delegated to external script)
 
 if "%USE_PROXY%"=="1" (
     if exist "%PROXY_SCRIPT%" (
-        echo 正在调用代理控制脚本：%PROXY_SCRIPT%
+        echo [INFO] Calling proxy controller script: %PROXY_SCRIPT%
         powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PROXY_SCRIPT%"
     ) else (
-        echo 已开启自动启用代理，但未找到代理控制脚本：%PROXY_SCRIPT%
+        echo [WARN] USE_PROXY=1 but proxy controller script not found: %PROXY_SCRIPT%
     )
 )
 
 
-:: 依次备份所有配置的仓库
+:: Backup all configured repositories in sequence
 
 for %%I in (%REPO_INDEXES%) do (
     call :BackupOneRepo %%I
@@ -71,52 +72,52 @@ for %%I in (%REPO_INDEXES%) do (
 goto :AfterBackup
 
 
-:: 备份单个仓库的子过程
+:: Subroutine: backup a single repository
 
 :BackupOneRepo
 set "IDX=%~1"
 
-:: 读取当前索引对应的配置
+:: Read configuration entries for the current index
 set "REPO_DIR=!REPO_DIR_%IDX%!"
 set "GIT_BRANCH=!GIT_BRANCH_%IDX%!"
 set "GITHUB_OWNER=!GITHUB_OWNER_%IDX%!"
 set "GITHUB_REPO=!GITHUB_REPO_%IDX%!"
 
-:: 若未配置仓库本地路径则跳过
+:: Skip if no local repository path is configured
 if "!REPO_DIR!"=="" (
-    echo [WARN] 未找到索引 %IDX% 对应的 REPO_DIR_!IDX!，跳过该仓库。
+    echo [WARN] REPO_DIR_!IDX! is not configured for index %IDX%, skipping this repository.
     goto :EOF
 )
 
-:: 分支默认 main（如果没填的话）
+:: Default branch to "main" if not set
 if "!GIT_BRANCH!"=="" (
     set "GIT_BRANCH=main"
 )
 
 echo.
 echo ================================
-echo 正在备份仓库 #!IDX!: !REPO_DIR!
+echo Backing up repository #!IDX!: !REPO_DIR!
 echo ================================
 
 cd /d "!REPO_DIR!"
 
-:: 添加所有更改
+:: Stage all changes
 git add .
 
-:: 只有有文件被修改时才进行提交和推送
+:: Only commit and push when there are changes
 git diff-index --quiet HEAD --
 if ERRORLEVEL 1 (
-    :: 组装提交信息（使用延迟变量展开，保证时间被正确取到）
+    :: Build commit message (use delayed expansion so that time is captured correctly)
     set "NOW=%date% %time%"
     git commit -m "!COMMIT_PREFIX!: !NOW!"
     
-    :: 使用环境变量中的账号和密码推送到 GitHub（https）
+    :: Push to GitHub via HTTPS using credentials from environment variables
     git push "https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/!GITHUB_OWNER!/!GITHUB_REPO!.git" !GIT_BRANCH!
     
     if ERRORLEVEL 1 (
-        echo 【ERR】 Push failed: !REPO_DIR!
+        echo [ERR] Push failed: !REPO_DIR!
     ) else (
-        echo 【OK】 Push completed: !REPO_DIR!
+        echo [OK] Push completed: !REPO_DIR!
     )
 ) else (
     echo [INFO] No changes to commit: !REPO_DIR!
@@ -128,7 +129,8 @@ goto :EOF
 :AfterBackup
 endlocal
 
-@REM 脚本执行完毕后等待用户关闭（方便查看结果），如果希望自动关闭，可以注释掉下一行
+@REM Keep console window open after script finishes (for viewing output).
+@REM Comment out the next line if you want the window to close automatically.
 pause
 
 

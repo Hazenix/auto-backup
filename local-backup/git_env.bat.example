@@ -1,0 +1,13 @@
+@echo off
+
+REM Git credentials configuration file
+REM IMPORTANT: This file is for local use only and must NEVER be committed to any Git repository.
+
+REM GitHub username (used for HTTPS authentication)
+set "GIT_USERNAME=yourname"
+
+REM GitHub PAT (Personal Access Token) – keep this secret
+REM Make sure this file stays ignored by .gitignore to avoid committing it by accident.
+set "GIT_PASSWORD=ghp_xxx"
+REM NOTE: This PAT expires on 5.12; 
+REM regenerate a new PAT on GitHub and update this value when it expires.
