@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Git credentials configuration file (for macOS/Linux)
+# IMPORTANT: This file is for local use only and must NEVER be committed to any Git repository.
+
+# GitHub username (used for HTTPS authentication)
+export GIT_USERNAME="yourname"
+
+# GitHub PAT (Personal Access Token) – keep this secret
+# Make sure this file stays ignored by .gitignore to avoid committing it by accident.
+export GIT_PASSWORD="ghp_xxx"
+
+# NOTE: Regenerate a new PAT on GitHub and update this value before it expires.
+
