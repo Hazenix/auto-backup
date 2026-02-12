@@ -17,21 +17,26 @@ set "PROXY_SCRIPT=%~dp0start_clash_proxy.ps1"
 
 :: ================================
 :: Repository index list to back up (extend as needed, e.g.: 1 2 3)
-set "REPO_INDEXES=1"
+set "REPO_INDEXES=1 2 3"
 :: ---------- Repository 1 configuration ----------
 :: Local repository path
-set "REPO_DIR_1=D:\ProjectOfBZH\demo-uniapp"
+set "REPO_DIR_1=D:\HuaweiMoveData\Users\毕哲晖\Documents\Obsidian Vault"
 :: Target branch
 set "GIT_BRANCH_1=main"
 :: GitHub repository info (owner and repo)
 set "GITHUB_OWNER_1=Hazehacker"
-set "GITHUB_REPO_1=demo-uniapp"
+set "GITHUB_REPO_1=self-knowledge-system"
 
 :: ---------- Repository 2 example (uncomment and modify when needed) ----------
-:: set "REPO_DIR_2=D:\path\to\another-repo"
-:: set "GIT_BRANCH_2=main"
-:: set "GITHUB_OWNER_2=YourGitHubName"
-:: set "GITHUB_REPO_2=another-repo"
+set "REPO_DIR_2=D:\HuaweiMoveData\Users\毕哲晖\Documents\Obsidian Vault\技术学习"
+set "GIT_BRANCH_2=main"
+set "GITHUB_OWNER_2=Hazehacker"
+set "GITHUB_REPO_2=tech-learning"
+
+set "REPO_DIR_3=D:\HuaweiMoveData\Users\毕哲晖\Documents\Obsidian Vault\项目经验"
+set "GIT_BRANCH_3=main"
+set "GITHUB_OWNER_3=Hazehacker"
+set "GITHUB_REPO_3=engineering-notes"
 
 :: ================================
 
