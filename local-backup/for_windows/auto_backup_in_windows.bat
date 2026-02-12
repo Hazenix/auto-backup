@@ -1,6 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: IMPORTANT (Encoding):
+:: - This .bat contains Chinese paths. Save this file as "UTF-8 with BOM".
+:: - Switch code page to UTF-8 BEFORE any lines that contain Chinese characters (paths, echo, etc.).
+chcp 65001 > nul
+
 :: ===========================
 :: Global configuration (can be customized)
 :: ===========================
@@ -104,7 +109,17 @@ echo ================================
 echo Backing up repository #!IDX!: !REPO_DIR!
 echo ================================
 
+:: Ensure the local repository directory exists before attempting to cd
+if not exist "!REPO_DIR!" (
+    echo [ERR] Local repository path does not exist: !REPO_DIR!
+    goto :EOF
+)
+
 cd /d "!REPO_DIR!"
+if errorlevel 1 (
+    echo [ERR] Failed to change directory to: !REPO_DIR!
+    goto :EOF
+)
 
 :: Stage all changes
 git add .
