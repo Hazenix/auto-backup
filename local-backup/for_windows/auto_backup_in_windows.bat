@@ -13,6 +13,9 @@ chcp 65001 > nul
 :: Commit message prefix (shared by all repositories)
 set "COMMIT_PREFIX=Daily auto-commit"
 
+::: Whether to push to GitHub after commit: 1 = enable, 0 = disable
+set "ENABLE_GITHUB_PUSH=1"
+
 :: Whether to automatically enable proxy: 1 = enable, 0 = disable (shared by all repositories)
 set "USE_PROXY=0"
 
@@ -124,20 +127,24 @@ if errorlevel 1 (
 :: Stage all changes
 git add .
 
-:: Only commit and push when there are changes
+::: Only commit (and optionally push) when there are changes
 git diff-index --quiet HEAD --
 if ERRORLEVEL 1 (
     :: Build commit message (use delayed expansion so that time is captured correctly)
     set "NOW=%date% %time%"
     git commit -m "!COMMIT_PREFIX!: !NOW!"
     
-    :: Push to GitHub via HTTPS using credentials from environment variables
-    git push "https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/!GITHUB_OWNER!/!GITHUB_REPO!.git" !GIT_BRANCH!
-    
-    if ERRORLEVEL 1 (
-        echo [ERR] Push failed: !REPO_DIR!
+    :: Optionally push to GitHub via HTTPS using credentials from environment variables
+    if "!ENABLE_GITHUB_PUSH!"=="1" (
+        git push "https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/!GITHUB_OWNER!/!GITHUB_REPO!.git" !GIT_BRANCH!
+        
+        if ERRORLEVEL 1 (
+            echo [ERR] Push failed: !REPO_DIR!
+        ) else (
+            echo [OK] Push completed: !REPO_DIR!
+        )
     ) else (
-        echo [OK] Push completed: !REPO_DIR!
+        echo [INFO] Not enable Github push, so skip GitHub push for: !REPO_DIR!
     )
 ) else (
     echo [INFO] No changes to commit: !REPO_DIR!
