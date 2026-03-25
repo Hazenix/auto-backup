@@ -1,14 +1,45 @@
 @echo off
+REM ============================================================================
+REM GitHub 自动备份配置文件
+REM ============================================================================
+REM 使用说明:
+REM   1. 复制此文件为 git_env.bat
+REM   2. 修改下面的 GIT_USERNAME 和 GIT_PASSWORD 为你的 GitHub 凭证
+REM   3. 在 REPO_CONFIG 区域添加你需要备份的仓库信息
+REM   4. 在 REPO_INDEXES 中设置需要备份的仓库编号
+REM   5. 双击 auto_backup_in_windows.bat 即可执行备份
+REM ============================================================================
 
-REM Git credentials configuration file
-REM IMPORTANT: This file is for local use only and must NEVER be committed to any Git repository.
-
-REM GitHub username (used for HTTPS authentication)
+REM ---------- Git 凭证配置 ----------
 set "GIT_USERNAME=yourname"
-
-REM GitHub PAT (Personal Access Token) – keep this secret
-REM Make sure this file stays ignored by .gitignore to avoid committing it by accident.
 set "GIT_PASSWORD=ghp_xxx"
 
-REM NOTE: This PAT expires on 5.12; 
-REM regenerate a new PAT on GitHub and update this value when it expires.
+REM ---------- 备份选项配置 ----------
+REM 提交信息前缀（所有仓库共用）
+set "COMMIT_PREFIX=Daily auto-commit"
+
+REM 是否启用代理: 1=启用, 0=禁用
+set "USE_PROXY=0"
+
+REM ---------- 仓库索引列表 (必填) ----------
+REM 定义需要备份的仓库编号，用空格分隔
+REM 例如: set "REPO_INDEXES=1 2 3"
+set "REPO_INDEXES=1 2"
+
+REM ---------- 仓库配置区 (在此添加你需要备份的仓库) ----------
+REM 格式说明:
+REM   REPO_DIR_N=本地仓库路径
+REM   GIT_BRANCH_N=目标分支(默认main)
+REM   GITHUB_OWNER_N=GitHub用户名
+REM   GITHUB_REPO_N=仓库名
+
+REM 示例:
+REM set "REPO_DIR_1=D:\MyProjects\MyNotes"
+REM set "GIT_BRANCH_1=main"
+REM set "GITHUB_OWNER_1=myusername"
+REM set "GITHUB_REPO_1=my-notes"
+
+REM set "REPO_DIR_2=D:\MyProjects\WorkDocs"
+REM set "GIT_BRANCH_2=main"
+REM set "GITHUB_OWNER_2=myusername"
+REM set "GITHUB_REPO_2=work-docs"
