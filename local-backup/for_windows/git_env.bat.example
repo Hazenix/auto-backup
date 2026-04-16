@@ -32,14 +32,17 @@ REM   REPO_DIR_N=本地仓库路径
 REM   GIT_BRANCH_N=目标分支(默认main)
 REM   GITHUB_OWNER_N=GitHub用户名
 REM   GITHUB_REPO_N=仓库名
+REM   PUSH_TO_ORIGIN_N=是否推送到origin(1=推送,0=仅本地提交)
 
 REM 示例:
 REM set "REPO_DIR_1=D:\MyProjects\MyNotes"
 REM set "GIT_BRANCH_1=main"
 REM set "GITHUB_OWNER_1=myusername"
 REM set "GITHUB_REPO_1=my-notes"
+REM set "PUSH_TO_ORIGIN_1=1"
 
 REM set "REPO_DIR_2=D:\MyProjects\WorkDocs"
 REM set "GIT_BRANCH_2=main"
 REM set "GITHUB_OWNER_2=myusername"
 REM set "GITHUB_REPO_2=work-docs"
+REM set "PUSH_TO_ORIGIN_2=0"

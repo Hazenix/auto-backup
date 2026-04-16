@@ -92,6 +92,10 @@ set "REPO_DIR=!REPO_DIR_%IDX%!"
 set "GIT_BRANCH=!GIT_BRANCH_%IDX%!"
 set "GITHUB_OWNER=!GITHUB_OWNER_%IDX%!"
 set "GITHUB_REPO=!GITHUB_REPO_%IDX%!"
+set "PUSH_TO_ORIGIN=!PUSH_TO_ORIGIN_%IDX%!"
+
+:: Default PUSH_TO_ORIGIN to 1 if not set
+if "!PUSH_TO_ORIGIN!"=="" set "PUSH_TO_ORIGIN=1"
 
 :: Skip if no local repository path is configured
 if "!REPO_DIR!"=="" (
@@ -141,14 +145,17 @@ if ERRORLEVEL 1 (
     :: Build commit message (use delayed expansion so that time is captured correctly)
     set "NOW=%date% %time%"
     git commit -m "!COMMIT_PREFIX!: !NOW!"
-    
-    :: Push to GitHub via HTTPS using credentials from environment variables
-    git push "https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/!GITHUB_OWNER!/!GITHUB_REPO!.git" !GIT_BRANCH!
-    
-    if ERRORLEVEL 1 (
-        echo [失败] 推送失败: !REPO_DIR!
+
+    :: Push to GitHub only if PUSH_TO_ORIGIN is enabled
+    if "!PUSH_TO_ORIGIN!"=="1" (
+        git push "https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/!GITHUB_OWNER!/!GITHUB_REPO!.git" !GIT_BRANCH!
+        if ERRORLEVEL 1 (
+            echo [失败] 推送失败: !REPO_DIR!
+        ) else (
+            echo [成功] 推送完成: !REPO_DIR!
+        )
     ) else (
-        echo [成功] 推送完成: !REPO_DIR!
+        echo [跳过] 已禁用推送: !REPO_DIR!
     )
 ) else (
     echo [信息] 无变更需要提交: !REPO_DIR!

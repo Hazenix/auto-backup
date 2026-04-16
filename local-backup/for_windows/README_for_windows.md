@@ -19,10 +19,10 @@
   - **ZH**：主批处理脚本。在文件开头读取配置，遍历所有配置好的仓库，执行 `git add/commit/push`，并可选地通过 PowerShell 控制代理。
 
 - **`git_env.bat`**
-  - **EN**: Local environment file that stores `GIT_USERNAME` and `GIT_PASSWORD` (GitHub PAT). It is ignored by Git via `.gitignore`.  
+  - **EN**: Local environment file that stores `GIT_USERNAME` , `GIT_PASSWORD` (GitHub PAT) and so on. It is ignored by Git via `.gitignore`.  
   
     **Note: This file needs tobe completed manually. You may refer to `git_env.bat.example`**
-  - **ZH**：本地环境变量文件，保存 `GIT_USERNAME` 和 `GIT_PASSWORD`（GitHub PAT）。该文件已通过 `.gitignore` 忽略，不会被提交。
+  - **ZH**：本地环境变量文件，保存 `GIT_USERNAME` 和 `GIT_PASSWORD`（GitHub PAT）等。该文件已通过 `.gitignore` 忽略，不会被提交。
   
     **注意：该文件需要自己补充，可参考 `git_env.bat.example`**
   
@@ -132,6 +132,29 @@
   4. 在**操作**中选择“启动程序（Start a program）”：
      - “程序或脚本”栏选择你保存的 `auto_backup_in_windows.bat`，或使用 `cmd.exe` 搭配参数。
   5. 完成向导，并手动运行一次任务进行测试。
+
+> 或者
+>
+> ```cmd
+> schtasks /create /tn "任务名称" /tr "程序或脚本路径" /sc 频率 /st 开始时间 [其他参数]
+> 
+> 
+> schtasks /create /tn "每日Git备份" /tr "cmd.exe /c \"D:\ProjectOfBZH\auto-backup\local-backup\for_windows\auto_backup_in_windows.bat\"" /sc daily /st 01:00 /ru SYSTEM /f
+> 
+> # 查看所有任务
+> schtasks /query
+> 
+> # 查看任务的详细信息
+> schtasks /query /tn "每日Git备份" /v
+> 
+> # 手动立即运行任务（用于测试）
+> schtasks /run /tn "每日Git备份"
+> 
+> # 删除任务
+> schtasks /delete /tn "每日Git备份" /f
+> ```
+>
+> 
 
 
 
