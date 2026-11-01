@@ -38,28 +38,28 @@ VAULT_DIR="$HOME/Documents/myproject/self-knowledge-system"
 # ---------- Repository 1: vault root ----------
 REPO_DIR_1="${VAULT_DIR}"
 GIT_BRANCH_1="main"
-GITHUB_OWNER_1="Hazehacker"
+GITHUB_OWNER_1="Hazenix"
 GITHUB_REPO_1="self-knowledge-system"
 PUSH_TO_ORIGIN_1=0
 
 # ---------- Repository 2: 技术学习 ----------
 REPO_DIR_2="${VAULT_DIR}/技术学习"
 GIT_BRANCH_2="main"
-GITHUB_OWNER_2="Hazehacker"
+GITHUB_OWNER_2="Hazenix"
 GITHUB_REPO_2="tech-learning"
 PUSH_TO_ORIGIN_2=0
 
 # ---------- Repository 3: 项目经验 ----------
 REPO_DIR_3="${VAULT_DIR}/项目经验"
 GIT_BRANCH_3="main"
-GITHUB_OWNER_3="Hazehacker"
+GITHUB_OWNER_3="Hazenix"
 GITHUB_REPO_3="engineering-notes"
 PUSH_TO_ORIGIN_3=0
 
 # ---------- Repository 4: 求职/我的简历 ----------
 REPO_DIR_4="${VAULT_DIR}/求职/我的简历"
 GIT_BRANCH_4="main"
-GITHUB_OWNER_4="Hazehacker"
+GITHUB_OWNER_4="Hazenix"
 GITHUB_REPO_4="my-resume"
 PUSH_TO_ORIGIN_4=0
 
@@ -67,7 +67,7 @@ PUSH_TO_ORIGIN_4=0
 # Re-enable by adding "5" back to REPO_INDEXES once the repo has content.
 # REPO_DIR_5="${VAULT_DIR}/拨号网络"
 # GIT_BRANCH_5="main"
-# GITHUB_OWNER_5="Hazehacker"
+# GITHUB_OWNER_5="Hazenix"
 # GITHUB_REPO_5="dial-up-network"
 # PUSH_TO_ORIGIN_5=0
 
